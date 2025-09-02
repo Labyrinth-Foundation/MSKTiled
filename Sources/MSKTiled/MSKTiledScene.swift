@@ -11,7 +11,6 @@ open class MSKTiledMapScene: SKScene {
     public let zPositionPerNamedLayer: [String: Int]
 
     public let mapNode = SKNode()
-    private let zoomGestureRecogniser = UIPinchGestureRecognizer()
     private let baseTileMapNode: SKTileMapNode
     private var pathGraph: GKGridGraph<GKGridGraphNode>?
 
@@ -117,9 +116,6 @@ open class MSKTiledMapScene: SKScene {
             }
             mapNode.addChild(layer)
         }
-
-        zoomGestureRecogniser.addTarget(self, action: #selector(handleZoomFrom(sender:)))
-        self.view?.addGestureRecognizer(zoomGestureRecogniser)
 
         setCameraConstraints()
     }
@@ -238,7 +234,6 @@ open class MSKTiledMapScene: SKScene {
     open override func willMove(from view: SKView) {
         super.willMove(from: view)
         pathGraph = nil
-        self.view?.removeGestureRecognizer(zoomGestureRecogniser)
     }
 
     public func getTileFromPositionInScene(position: CGPoint) -> MSKTiledTile? {
@@ -320,6 +315,7 @@ open class MSKTiledMapScene: SKScene {
     }
 
     private func setCameraConstraints() {
+        return;
         let scaledSize = CGSize(width: size.width * cameraNode.xScale, height: size.height * cameraNode.yScale)
         let contentBounds = baseTileMapNode.frame
         let xInset = scaledSize.width / 2

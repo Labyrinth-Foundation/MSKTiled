@@ -285,35 +285,6 @@ open class MSKTiledMapScene: SKScene {
         return layer.tileDefinition(atColumn: tile.column, row: tile.row)?.userData
     }
 
-    open override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let touch = touches.first {
-            let currentPoint: CGPoint = touch.location(in: mapNode)
-            let previousPoint: CGPoint = touch.previousLocation(in: mapNode)
-            let deltaX = (currentPoint.x - previousPoint.x) * -1
-            let deltaY = (currentPoint.y - previousPoint.y) * -1
-            let moveAction = SKAction.moveBy(x: deltaX, y: deltaY, duration: 0.2)
-            moveAction.timingMode = .easeOut
-            cameraNode.run(moveAction)
-        }
-    }
-
-    @objc open func handleZoomFrom(sender: UIPinchGestureRecognizer) {
-        if sender.numberOfTouches == 2 {
-            let locationInView = sender.location(in: self.view)
-            let location = self.convertPoint(fromView: locationInView)
-            if sender.state == .changed {
-                let convertedScale = 1/sender.scale
-                let newScale = cameraNode.xScale*convertedScale
-                cameraNode.setScale(newScale)
-                setCameraConstraints()
-                let locationAfterScale = self.convertPoint(fromView: locationInView)
-                let locationDelta = CGPoint(x: location.x - locationAfterScale.x, y: location.y - locationAfterScale.y)
-                cameraNode.position = .init(x: cameraNode.position.x + locationDelta.x, y: cameraNode.position.y + locationDelta.y)
-                sender.scale = 1.0
-            }
-        }
-    }
-
     private func setCameraConstraints() {
         return;
         let scaledSize = CGSize(width: size.width * cameraNode.xScale, height: size.height * cameraNode.yScale)
